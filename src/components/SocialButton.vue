@@ -24,7 +24,7 @@ export default {
 <style scoped>
 .button {
   display: flex;
-  margin: 1rem;
+  margin: 1.5rem 1.5rem 1.5rem 0;
   position: relative;
   border: 1px solid #dedede;
   border-radius: 10px;
@@ -33,6 +33,10 @@ export default {
   width: 155px;
   height: 50px;
 }
+
+/* .button:last-of-type {
+  margin-right: 0;
+} */
 
 .button:hover {
   cursor: pointer;

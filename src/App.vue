@@ -16,13 +16,13 @@ export default {
     return {
       item: {
         url_cover: "https://picsum.photos/id/1/1920/800",
-        url_profile: "https://picsum.photos/500/500",
+        url_profile: "https://picsum.photos/500/700",
         title: "Landing page",
-        body: "<h2>Sottotitolo di prova</h2><p>Paragrafo di prova</p><p>Paragrafo di prova 2</p><p>Paragrafo di prova 3</p>",
+        body: "<h2>Emmanuele</h2><p>Paragrafo di prova</p><p>Paragrafo di prova 2</p><p>Paragrafo di prova 3</p>",
         social: {
           facebook: true,
           linkedin: true,
-          twitter: false,
+          twitter: true,
           instagram: false,
           emm: true,
         },
@@ -65,5 +65,6 @@ body {
   height: 100%;
 
   font-family: "Outfit", sans-serif;
+  color: #585858;
 }
 </style>

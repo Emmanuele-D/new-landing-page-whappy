@@ -5,6 +5,7 @@
         <img :src="item.url_profile" alt="" />
       </div>
     </div>
+
     <div class="container-body">
       <div class="title">
         <h2>{{ item.title }}</h2>
@@ -23,13 +24,23 @@
       <div class="form-template">
         <form id="form-di-contatto">
           <h3>Form di contatto</h3>
-          <FormItem
-            v-for="formItem in item.form"
-            :key="formItem"
-            :formItem="formItem"
+          <div
+            v-for="(formItem, index) in formContatto"
+            :key="index"
+            class="item"
           >
-          </FormItem>
-          <button @click="sendForm" class="send-button">Send</button>
+            <label :for="formItem.label">
+              {{ formItem.label }}
+              <span v-if="formItem.required == true"> *</span>
+            </label>
+            <input
+              :class="{ 'input-error': formItem.error }"
+              v-model="formItem.value"
+              :id="formItem.label"
+              type="text"
+            />
+          </div>
+          <button @click.prevent="sendForm" class="send-button">Send</button>
         </form>
         <p><span class="asterisco">* Campi obbligatori</span></p>
       </div>
@@ -39,7 +50,6 @@
 
 <script>
 import SocialButton from "./SocialButton.vue";
-import FormItem from "./FormItem.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faFacebook,
@@ -54,7 +64,6 @@ export default {
   name: "MainComponent",
   components: {
     SocialButton,
-    FormItem,
   },
   created() {
     for (let element in this.item.social) {
@@ -68,6 +77,7 @@ export default {
         label: element.nome,
         value: "",
         required: element.required,
+        error: false,
       });
     });
   },
@@ -85,18 +95,17 @@ export default {
       let error = null;
       let formJson = {};
       this.formContatto.forEach((element) => {
-        if (element.required == true) {
-          if (element.value == "") {
-            error = true;
-          }
+        if (element.required == true && element.value == "") {
+          element.error = true;
+          error = true;
         } else {
-          formJson[element.label] = element.value;
+          element.error = false;
         }
       });
       if (error) {
         return alert("ERRORE>> CAMPO OBBLIGATORIO VUOTO");
       } else {
-        return alert("OGGETTO RESTITUITO>>" + formJson);
+        return alert("OGGETTO RESTITUITO>>" + toString(formJson));
       }
     },
   },
@@ -132,23 +141,22 @@ export default {
 
 .avatar {
   position: absolute;
-  bottom: -50px;
-  width: 20vw;
-  max-width: 200px;
-  min-width: 100px;
-  height: 20vw;
-  max-height: 200px;
-  min-height: 100px;
+  bottom: 0;
+  left: 50%;
 
-  margin: 0 5vw;
+  width: 50%;
+  max-width: 180px;
 
   border-radius: 50%;
-  border: 5px solid white;
+  border: 7px solid white;
+
+  transform: translate(-50%, 50%);
 }
 
 .avatar img {
   width: 100%;
   border-radius: 50%;
+  aspect-ratio: 1;
 }
 
 .container-body {
@@ -160,17 +168,13 @@ export default {
 }
 
 .title {
-  align-self: end;
+  align-self: start;
   color: #585858;
   font-size: 2rem;
 }
 
 .title * {
-  margin: 3rem 2rem;
-}
-
-.content {
-  padding: 1rem;
+  margin-top: 7rem;
 }
 
 .social-buttons {
@@ -179,16 +183,11 @@ export default {
   align-items: center;
 }
 
-.social-icon {
-  width: 100px;
-  margin: 1rem;
-  padding: 8px 16px 8px 8px;
-}
-
 .form-template {
   margin: 2rem 0;
   padding: 1rem;
-  width: 50%;
+  width: 100%;
+  max-width: 500px;
   align-self: center;
   background: #585858;
   color: #ededed;
@@ -222,5 +221,19 @@ export default {
 .asterisco {
   font-size: 0.7rem;
   color: #e8806d;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+span {
+  color: #e8806d;
+}
+
+.input-error {
+  border: 2px solid #e8806d;
 }
 </style>
