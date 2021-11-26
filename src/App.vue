@@ -1,28 +1,69 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <MainComponent :item="item" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import MainComponent from "./components/MainComponent.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    MainComponent,
+  },
+  data() {
+    return {
+      item: {
+        url_cover: "https://picsum.photos/id/1/1920/800",
+        url_profile: "https://picsum.photos/500/500",
+        title: "Landing page",
+        body: "<h2>Sottotitolo di prova</h2><p>Paragrafo di prova</p><p>Paragrafo di prova 2</p><p>Paragrafo di prova 3</p>",
+        social: {
+          facebook: true,
+          linkedin: true,
+          twitter: false,
+          instagram: false,
+          emm: true,
+        },
+        form: [
+          {
+            nome: "Nome e Cognome",
+            required: true,
+          },
+          {
+            nome: "Email",
+            required: true,
+          },
+          {
+            nome: "Campo aggiunto",
+            required: true,
+          },
+          {
+            nome: "Campo non obbligatorio",
+            required: false,
+          },
+        ],
+      },
+    };
+  },
+};
 </script>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;700&display=swap');
+
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+/* * {
+  border: 1px solid rgb(189, 255, 187);
+} */
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  height: 100%;
+
+  font-family: "Outfit", sans-serif;
 }
 </style>
