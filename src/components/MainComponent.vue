@@ -72,9 +72,9 @@ export default {
       }
     }
 
-    this.item.form.forEach((element) => {
+    this.item.form.fields.forEach((element) => {
       this.formContatto.push({
-        label: element.nome,
+        label: element.name["it-IT"],
         value: "",
         required: element.required,
         error: false,
