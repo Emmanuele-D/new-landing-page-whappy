@@ -73,6 +73,7 @@ export default {
     }
 
     this.item.form.fields.forEach((element) => {
+      console.log(element.name["it-IT"]);
       this.formContatto.push({
         label: element.name["it-IT"],
         value: "",

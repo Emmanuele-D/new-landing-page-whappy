@@ -14,7 +14,7 @@ export default {
     MainComponent,
   },
   created() {
-    axios.get("https://api-fdt.whappy.it/api/Landing/7").then((res) => {
+    axios.get("https://api-fdt.whappy.it/api/Landing/2").then((res) => {
       this.item = res.data;
       console.log(this.item);
 
