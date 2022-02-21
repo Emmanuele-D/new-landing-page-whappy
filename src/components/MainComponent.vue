@@ -74,9 +74,9 @@ export default {
     item: Object,
   },
   methods: {
-    sendForm() {
+    sendForm(e) {
+      e.preventDefault();
       let error = null;
-      let formJson = {};
       this.formContatto.forEach((element) => {
         if (element.required == true && element.value == "") {
           element.error = true;
@@ -86,9 +86,11 @@ export default {
         }
       });
       if (error) {
-        return alert("ERRORE>> CAMPO OBBLIGATORIO VUOTO");
+        return console.log("ERRORE>> CAMPO OBBLIGATORIO VUOTO");
       } else {
-        return alert("OGGETTO RESTITUITO>>" + toString(formJson));
+        return console.log(
+          "OGGETTO RESTITUITO>>" + JSON.stringify(this.formContatto)
+        );
       }
     },
   },
