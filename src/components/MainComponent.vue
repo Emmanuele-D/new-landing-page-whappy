@@ -1,4 +1,4 @@
-<template>
+<template  >
   <div class="main-container" :style="cssProps">
     <div class="container-header">
       <div class="avatar">
@@ -6,43 +6,43 @@
       </div>
     </div>
 
-    <div class="container-body">
-      <div class="title">
+    <div class="section">
+      <div class="section-title">
         <h2>{{ item.title }}</h2>
       </div>
+      <div v-html="item.body" class="section-body"></div>
+    </div>
 
-      <div class="content" v-html="item.body"></div>
+    <div v-if="socialArray" class="section">
+      <SocialButton
+        v-for="social in socialsArray"
+        :key="social"
+        :nameSocial="social"
+      ></SocialButton>
+    </div>
 
-      <div class="social-buttons">
-        <SocialButton
-          v-for="social in socialsArray"
-          :key="social"
-          :nameSocial="social"
-        ></SocialButton>
-      </div>
-
-      <div class="form-template">
-        <form id="form-di-contatto">
-          <h3>Form di contatto</h3>
-          <div
-            v-for="(formItem, index) in formContatto"
-            :key="index"
-            class="item"
-          >
-            <label :for="formItem.label">
-              {{ formItem.label }}
-              <span v-if="formItem.required == true"> *</span>
-            </label>
-            <input
-              :class="{ 'input-error': formItem.error }"
-              v-model="formItem.value"
-              :id="formItem.label"
-              type="text"
-            />
+    <div v-if="formContatto.length" class="section">
+      <div class="section-form">
+        <h3>Form di Contatto</h3>
+        <span class="section-didascalia"> * campi obbligatori </span>
+        <form>
+          <div v-for="item in formContatto" :key="item.label" class="form-item">
+            <div>
+              <label :for="label">{{ item.label }}</label>
+              <span v-if="item.required"> *</span>
+            </div>
+            <div>
+              <input
+                type="text"
+                :id="item.label"
+                :placeholder="item.label"
+                v-model="item.value"
+                :class="{ required: item.error }"
+              />
+            </div>
           </div>
-          <button @click.prevent="sendForm" class="send-button">Send</button>
+          <button @click="sendForm">Invia</button>
         </form>
-        <p><span class="asterisco">* Campi obbligatori</span></p>
       </div>
     </div>
   </div>
@@ -65,26 +65,8 @@ export default {
   components: {
     SocialButton,
   },
-  created() {
-    for (let element in this.item.social) {
-      if (this.item.social[element] == true) {
-        this.socialsArray.push(element);
-      }
-    }
-
-    this.item.form.fields.forEach((element) => {
-      console.log(element.name["it-IT"]);
-      this.formContatto.push({
-        label: element.name["it-IT"],
-        value: "",
-        required: element.required,
-        error: false,
-      });
-    });
-  },
   data() {
     return {
-      socialsArray: [],
       formContatto: [],
     };
   },
@@ -116,125 +98,132 @@ export default {
         "--url-bg": "url(" + this.item.url_cover + ")",
       };
     },
+    socialsArray() {
+      let array = [];
+      this.item.social.forEach((element) => {
+        element.nome ? array.push(element) : null;
+      });
+      return array;
+    },
+  },
+  watch: {
+    item: {
+      handler(val) {
+        this.formContatto = [];
+        val.form.fields.forEach((element) => {
+          console.log(element);
+          this.formContatto.push({
+            label: element.name["it-IT"],
+            value: "",
+            required: element.required,
+            error: false,
+          });
+        });
+      },
+      deep: true,
+    },
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>
+/* * {
+  border: 1px solid palevioletred;
+} */
+
 .main-container {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
+  background: #e9ecef;
 }
 
 .container-header {
   position: relative;
 
-  width: 100vw;
+  width: 100%;
   height: 35vh;
 
   background: var(--url-bg);
   background-size: cover;
   background-position: center;
+
+  margin-bottom: 120px;
 }
 
 .avatar {
   position: absolute;
   bottom: 0;
   left: 50%;
+  transform: translate(-50%, 50%);
 
   width: 50%;
   max-width: 180px;
 
   border-radius: 50%;
-  border: 7px solid white;
-
-  transform: translate(-50%, 50%);
 }
 
 .avatar img {
   width: 100%;
   border-radius: 50%;
   aspect-ratio: 1;
+  border: 7px solid white;
 }
 
-.container-body {
-  display: flex;
-  flex-direction: column;
-  max-width: 900px;
-  margin: auto;
-  padding: 0 2rem;
+.section {
+  width: 80%;
+  border-radius: 20px;
+  background: white;
+  margin: 0 auto 2rem;
+  padding: 2rem;
 }
 
-.title {
-  align-self: start;
-  color: #585858;
-  font-size: 2rem;
-}
-
-.title * {
-  margin-top: 7rem;
-}
-
-.social-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.form-template {
-  margin: 2rem 0;
-  padding: 1rem;
-  width: 100%;
+.section-form {
   max-width: 500px;
-  align-self: center;
-  background: #585858;
-  color: #ededed;
+  margin: auto;
+  color: rgb(20, 20, 20);
+  margin: 1rem auto;
 }
 
-#form-di-contatto {
-  display: flex;
-  flex-direction: column;
-}
-
-.send-button {
-  align-self: flex-end;
-  margin: 1rem;
-  padding: 0.5rem 1rem;
-  outline: none;
-  display: flex;
-  margin: 1rem;
-  position: relative;
-  border: 1px solid #ededed;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #dedede;
-}
-
-.send-button:hover {
-  cursor: pointer;
-  background: #dedede;
-  box-shadow: 0 0 0 2px #fefefe;
-}
-
-.asterisco {
+.section-didascalia {
   font-size: 0.7rem;
-  color: #e8806d;
 }
 
-.item {
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
+form {
+  margin-top: 2rem;
 }
 
-span {
-  color: #e8806d;
+input {
+  border: 1px solid grey;
+  padding: 0.5rem;
+  border-radius: 10px;
 }
 
-.input-error {
-  border: 2px solid #e8806d;
+.form-item * {
+  width: 100%;
+}
+
+.form-item label {
+  font-weight: bolder;
+}
+
+.form-item {
+  margin-bottom: 1rem;
+}
+
+.required {
+  border: 1px solid orange;
+  border-radius: 10px;
+}
+
+button {
+  background: white;
+  border: 1px solid grey;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+}
+
+button:hover,
+button:active {
+  background: rgb(187, 234, 240);
+  transform: scale(95%);
 }
 </style>

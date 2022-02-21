@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <MainComponent :item="item" />
+    <MainComponent v-if="item != {}" :item="item" />
   </div>
 </template>
 
@@ -16,9 +16,7 @@ export default {
   created() {
     axios.get("https://api-fdt.whappy.it/api/Landing/2").then((res) => {
       this.item = res.data;
-      console.log(this.item);
-
-      console.log(" CREATED ", this.translate(this.item.title));
+      console.log("CIAO BISSO", this.item);
 
       this.item.title = this.item.title["it-IT"];
       this.item.body = this.item.body["it-IT"];
@@ -26,49 +24,8 @@ export default {
   },
   data() {
     return {
-      item: {
-        // url_cover: "https://picsum.photos/id/1/1920/800",
-        // url_profile: "https://picsum.photos/500/700",
-        // title: "Landing page",
-        // body: "<h2>Emmanuele</h2><p>Paragrafo di prova</p><p>Paragrafo di prova 2</p><p>Paragrafo di prova 3</p>",
-        // social: {
-        //   facebook: true,
-        //   linkedin: true,
-        //   twitter: true,
-        //   instagram: false,
-        // },
-        // form: [
-        //   {
-        //     nome: "Nome e Cognome",
-        //     required: true,
-        //   },
-        //   {
-        //     nome: "Email",
-        //     required: true,
-        //   },
-        //   {
-        //     nome: "Campo aggiunto",
-        //     required: true,
-        //   },
-        //   {
-        //     nome: "Campo non obbligatorio",
-        //     required: false,
-        //   },
-        // ],
-      },
+      item: {},
     };
-  },
-  methods: {
-    translate(t) {
-      console.log(" - T ", t);
-      console.log(" WINDOW ", window);
-
-      // return t[
-      //   window.i18n.global.locale.value +
-      //     "-" +
-      //     window.i18n.global.locale.value.toUpperCase()
-      // ];
-    },
   },
 };
 </script>
