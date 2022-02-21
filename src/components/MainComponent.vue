@@ -65,15 +65,47 @@ export default {
   components: {
     SocialButton,
   },
+  created() {
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll);
+  },
   data() {
     return {
       formContatto: [],
+      pctScrolled: 0,
     };
   },
   props: {
     item: Object,
   },
   methods: {
+    handleScroll() {
+      function getDocHeight() {
+        var D = document;
+        return Math.max(
+          D.body.scrollHeight,
+          D.documentElement.scrollHeight,
+          D.body.offsetHeight,
+          D.documentElement.offsetHeight,
+          D.body.clientHeight,
+          D.documentElement.clientHeight
+        );
+      }
+
+      var winheight =
+        window.innerHeight ||
+        (document.documentElement || document.body).clientHeight;
+      var docheight = getDocHeight();
+      var scrollTop =
+        window.pageYOffset ||
+        (document.documentElement || document.body.parentNode || document.body)
+          .scrollTop;
+      var trackLength = docheight - winheight;
+      var pctScrolled = Math.floor((scrollTop / trackLength) * 100); // gets percentage scrolled (ie: 80 or NaN if tracklength == 0)
+      this.pctScrolled = pctScrolled;
+    },
     sendForm(e) {
       e.preventDefault();
       let error = null;
@@ -113,7 +145,6 @@ export default {
       handler(val) {
         this.formContatto = [];
         val.form.fields.forEach((element) => {
-          console.log(element);
           this.formContatto.push({
             label: element.name["it-IT"],
             value: "",
