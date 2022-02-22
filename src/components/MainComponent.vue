@@ -1,5 +1,5 @@
 <template  >
-  <div class="main-container" :style="cssProps">
+  <div class="main-container margin-bottom" :style="cssProps">
     <div class="container-header">
       <div class="avatar">
         <img :src="item.url_profile" alt="" />
@@ -33,6 +33,7 @@
             </div>
             <div>
               <input
+                @keyup="formClicked"
                 type="text"
                 :id="item.label"
                 :placeholder="item.label"
@@ -49,16 +50,9 @@
 </template>
 
 <script>
-import SocialButton from "./SocialButton.vue";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faFacebook,
-  faInstagram,
-  faTwitter,
-  faLinkedin,
-} from "@fortawesome/free-brands-svg-icons";
+import axios from "axios";
 
-library.add(faFacebook, faInstagram, faTwitter, faLinkedin);
+import SocialButton from "./SocialButton.vue";
 
 export default {
   name: "MainComponent",
@@ -66,14 +60,32 @@ export default {
     SocialButton,
   },
   created() {
+    this.paramsFromRoute.titolo = this.$route.params.titolo;
+    this.paramsFromRoute.id = this.$route.params.id;
+    this.paramsFromRoute.userCode = this.$route.params.code;
+
+    this.getIpAddress();
     window.addEventListener("scroll", this.handleScroll);
+
+    var visibilityChange;
+    if (typeof document.hidden !== "undefined") {
+      // Opera 12.10 and Firefox 18 and later support
+      visibilityChange = "visibilitychange";
+    } else if (typeof document.mozHidden !== "undefined") {
+      visibilityChange = "mozvisibilitychange";
+    } else if (typeof document.msHidden !== "undefined") {
+      visibilityChange = "msvisibilitychange";
+    } else if (typeof document.webkitHidden !== "undefined") {
+      visibilityChange = "webkitvisibilitychange";
+    }
+
+    document.addEventListener(visibilityChange, this.checkTime);
   },
   mounted() {
     this.setStartingTime();
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);
-    this.checkTime();
   },
   data() {
     return {
@@ -81,19 +93,68 @@ export default {
       pctScrolled: 0,
       startingTime: 0,
       elapsedTime: 0,
+      listenFormClicked: true,
+      ipFasullo: "192.168.899.899",
+      paramsFromRoute: {
+        titolo: "",
+        id: 0,
+        userCode: 0,
+      },
     };
   },
   props: {
     item: Object,
   },
   methods: {
+    getIpAddress() {
+      axios
+        .get("https://ipinfo.io/json")
+        .then(({ data }) => {
+          localStorage.getItem("ipAddress") ? "" : (this.ipFasullo = data.ip);
+          // localStorage.setItem("ipAddress", data.ip);
+        })
+        .then((res) => {
+          console.log(res);
+        });
+    },
+
     setStartingTime() {
       this.startingTime = new Date().getTime();
     },
     checkTime() {
+      this.elapsedTime = 0;
       let endTime = new Date().getTime();
-      this.elapsedTime = endTime - this.startingTime;
-      console.log(this.elapsedTime);
+      this.elapsedTime = (endTime - this.startingTime) / 1000;
+
+      if (this.ipFasullo) {
+        axios
+          .post(
+            "https://api-fdt.whappy.it/api/SocialShare/SetLandingTimeOfStay/" +
+              this.paramsFromRoute.id +
+              "/" +
+              this.paramsFromRoute.userCode +
+              "/" +
+              this.elapsedTime.toFixed(0).toString() +
+              "/" +
+              this.ipFasullo
+          )
+          .then((res) => {
+            console.log(res);
+            var visibilityChange;
+            if (typeof document.hidden !== "undefined") {
+              // Opera 12.10 and Firefox 18 and later support
+              visibilityChange = "visibilitychange";
+            } else if (typeof document.mozHidden !== "undefined") {
+              visibilityChange = "mozvisibilitychange";
+            } else if (typeof document.msHidden !== "undefined") {
+              visibilityChange = "msvisibilitychange";
+            } else if (typeof document.webkitHidden !== "undefined") {
+              visibilityChange = "webkitvisibilitychange";
+            }
+
+            document.removeEventListener(visibilityChange, this.checkTime);
+          });
+      }
     },
     handleScroll() {
       function getDocHeight() {
@@ -119,6 +180,44 @@ export default {
       var trackLength = docheight - winheight;
       var pctScrolled = Math.floor((scrollTop / trackLength) * 100); // gets percentage scrolled (ie: 80 or NaN if tracklength == 0)
       this.pctScrolled = pctScrolled;
+      if (this.pctScrolled >= this.item.scrollMin) {
+        if (this.ipFasullo) {
+          axios
+            .post(
+              "https://api-fdt.whappy.it/api/SocialShare/SetLandingScroll/" +
+                this.paramsFromRoute.id +
+                "/" +
+                this.paramsFromRoute.userCode +
+                "/" +
+                this.ipFasullo
+            )
+            .then((res) => {
+              console.log(res);
+            });
+        }
+        window.removeEventListener("scroll", this.handleScroll);
+      }
+    },
+    formClicked() {
+      if (this.listenFormClicked) {
+        if (this.ipFasullo) {
+          axios
+            .post(
+              "https://api-fdt.whappy.it/api/SocialShare/SetLandingStartForm/" +
+                this.paramsFromRoute.id +
+                "/" +
+                this.paramsFromRoute.userCode +
+                "/" +
+                this.ipFasullo
+            )
+            .then((res) => {
+              console.log(res);
+            });
+          this.listenFormClicked = false;
+        }
+      } else {
+        return;
+      }
     },
     sendForm(e) {
       e.preventDefault();
@@ -134,9 +233,21 @@ export default {
       if (error) {
         return console.log("ERRORE>> CAMPO OBBLIGATORIO VUOTO");
       } else {
-        return console.log(
-          "OGGETTO RESTITUITO>>" + JSON.stringify(this.formContatto)
-        );
+        if (this.ipFasullo) {
+          axios
+            .post(
+              "https://api-fdt.whappy.it/api/SocialShare/SendForm/" +
+                this.paramsFromRoute.id +
+                "/" +
+                this.paramsFromRoute.userCode +
+                "/" +
+                this.ipFasullo,
+              this.formContatto
+            )
+            .then((res) => {
+              console.log(res);
+            });
+        }
       }
     },
   },
@@ -272,5 +383,9 @@ button:hover,
 button:active {
   background: rgb(187, 234, 240);
   transform: scale(95%);
+}
+
+.padding-bottom {
+  padding-bottom: 3rem;
 }
 </style>
