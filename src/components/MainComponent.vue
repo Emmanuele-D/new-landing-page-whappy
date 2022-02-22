@@ -68,19 +68,33 @@ export default {
   created() {
     window.addEventListener("scroll", this.handleScroll);
   },
+  mounted() {
+    this.setStartingTime();
+  },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);
+    this.checkTime();
   },
   data() {
     return {
       formContatto: [],
       pctScrolled: 0,
+      startingTime: 0,
+      elapsedTime: 0,
     };
   },
   props: {
     item: Object,
   },
   methods: {
+    setStartingTime() {
+      this.startingTime = new Date().getTime();
+    },
+    checkTime() {
+      let endTime = new Date().getTime();
+      this.elapsedTime = endTime - this.startingTime;
+      console.log(this.elapsedTime);
+    },
     handleScroll() {
       function getDocHeight() {
         var D = document;
