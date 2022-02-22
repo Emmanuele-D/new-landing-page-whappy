@@ -126,6 +126,8 @@ export default {
       let endTime = new Date().getTime();
       this.elapsedTime = (endTime - this.startingTime) / 1000;
 
+      console.log("ELAPSED TIME", this.elapsedTime);
+
       if (this.ipFasullo) {
         axios
           .post(

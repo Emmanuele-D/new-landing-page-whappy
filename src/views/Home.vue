@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       item: {},
-      ipFasullo: "",
+      ipFasullo: "135",
       paramsFromRoute: {
         titolo: "",
         id: 0,
@@ -61,20 +61,18 @@ export default {
         });
     },
     landingOpen() {
-      if (this.ipFasullo) {
-        axios
-          .post(
-            "https://api-fdt.whappy.it/api/SocialShare/SetLandingOpen/" +
-              this.paramsFromRoute.id +
-              "/" +
-              this.paramsFromRoute.userCode +
-              "/" +
-              this.ipFasullo
-          )
-          .then((res) => {
-            console.log(res);
-          });
-      }
+      axios
+        .post(
+          "https://api-fdt.whappy.it/api/SocialShare/SetLandingOpen/" +
+            this.paramsFromRoute.id +
+            "/" +
+            this.paramsFromRoute.userCode +
+            "/" +
+            this.ipFasullo
+        )
+        .then((res) => {
+          console.log(res);
+        });
     },
   },
 };
