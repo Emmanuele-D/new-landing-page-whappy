@@ -10,7 +10,11 @@
       <div class="section-title">
         <h2>{{ item.title }}</h2>
       </div>
-      <div v-html="item.body" class="section-body"></div>
+      <div class="section-body socialpost-body">
+        <div class="ql-editor">
+          <div v-html="item.body"></div>
+        </div>
+      </div>
     </div>
 
     <div v-if="socialArray" class="section">
@@ -334,6 +338,7 @@ export default {
   background: white;
   margin: 0 auto 2rem;
   padding: 2rem;
+  overflow: hidden;
 }
 
 .section-form {
