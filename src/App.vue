@@ -10,7 +10,7 @@ export default {
 };
 </script>
 
-<style >
+<style lang="scss" >
 .socialpost-body .ql-editor p,
 .socialpost-body .ql-editor ol,
 .socialpost-body .ql-editor ul,
