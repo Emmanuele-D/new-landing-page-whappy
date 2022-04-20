@@ -60,26 +60,26 @@ import SocialButton from "./SocialButton.vue";
 
 export default {
   name: "MainComponent",
-  metaInfo() {
-    return {
-      title: this.item.title,
-      titleTemplate: null,
-      meta: [
-        {
-          property: "og:image",
-          content: this.item.url_cover,
-          vmid: "og:image",
-        },
-        { property: "og:title", content: this.item.title, vmid: "og:title" },
-        { property: "og:type", content: "website", vmid: "og:type" },
-        {
-          property: "og:description",
-          content: this.item.OgDescription,
-          vmid: "og:description",
-        },
-      ],
-    };
-  },
+  // metaInfo() {
+  //   return {
+  //     title: this.item.title,
+  //     titleTemplate: null,
+  //     meta: [
+  //       {
+  //         property: "og:image",
+  //         content: this.item.url_cover,
+  //         vmid: "og:image",
+  //       },
+  //       { property: "og:title", content: this.item.title, vmid: "og:title" },
+  //       { property: "og:type", content: "website", vmid: "og:type" },
+  //       {
+  //         property: "og:description",
+  //         content: this.item.OgDescription,
+  //         vmid: "og:description",
+  //       },
+  //     ],
+  //   };
+  // },
   components: {
     SocialButton,
   },
