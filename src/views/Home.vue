@@ -54,7 +54,7 @@ export default {
       axios
         .get("https://api-fdt.whappy.it/api/Landing/" + this.paramsFromRoute.id)
         .then((res) => {
-          console.log("LANDING PAGE DATA ", res.data.body);
+          console.log("LANDING PAGE DATA ", res.data);
           this.item = res.data;
           this.item.title = this.item.title["it-IT"];
           this.item.body = this.item.body["it-IT"];

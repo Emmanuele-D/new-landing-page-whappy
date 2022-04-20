@@ -46,7 +46,7 @@
               />
             </div>
           </div>
-          <button @click="sendForm">Invia</button>
+          <button @click="sendForm">{{ testoBottone }}</button>
         </form>
       </div>
     </div>
@@ -60,6 +60,26 @@ import SocialButton from "./SocialButton.vue";
 
 export default {
   name: "MainComponent",
+  metaInfo() {
+    return {
+      title: this.item.title,
+      titleTemplate: null,
+      meta: [
+        {
+          property: "og:image",
+          content: this.item.url_cover,
+          vmid: "og:image",
+        },
+        { property: "og:title", content: this.item.title, vmid: "og:title" },
+        { property: "og:type", content: "website", vmid: "og:type" },
+        {
+          property: "og:description",
+          content: this.item.OgDescription,
+          vmid: "og:description",
+        },
+      ],
+    };
+  },
   components: {
     SocialButton,
   },
@@ -87,12 +107,14 @@ export default {
   },
   mounted() {
     this.setStartingTime();
+    console.log(this.item);
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);
   },
   data() {
     return {
+      testoBottone: "Invia",
       formContatto: [],
       pctScrolled: 0,
       startingTime: 0,
@@ -251,7 +273,12 @@ export default {
               this.formContatto
             )
             .then((res) => {
-              console.log(res);
+              if (res) {
+                this.testoBottone = "Form inviato correttamente";
+                this.formContatto.forEach((element) => {
+                  element.value = "";
+                });
+              }
             });
         }
       }
@@ -394,5 +421,37 @@ button:active {
 
 .padding-bottom {
   padding-bottom: 3rem;
+}
+
+.show-modal {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.1);
+  transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+  z-index: 10;
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 1rem 1.5rem;
+  width: 80vw;
+  border-radius: 0.5rem;
 }
 </style>
