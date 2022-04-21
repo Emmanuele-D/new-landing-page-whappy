@@ -5,6 +5,8 @@
 </template>
 
 <script>
+// import axios from "axios";
+
 export default {
   name: "App",
   metaInfo: {
@@ -15,6 +17,51 @@ export default {
     },
     meta: [{ charset: "utf-8" }],
   },
+
+  // metaInfo() {
+  //   return {
+  //     title: this.item.title,
+  //     titleTemplate: "%s | Arkadiainfo",
+  //     htmlAttrs: {
+  //       lang: "en-US",
+  //     },
+  //     meta: [
+  //       { charset: "utf-8" },
+  //       {
+  //         property: "og:image",
+  //         content: this.item.url_cover,
+  //         vmid: "og:image",
+  //       },
+  //       { property: "og:title", content: this.item.title, vmid: "og:title" },
+  //       { property: "og:type", content: "website", vmid: "og:type" },
+  //       {
+  //         property: "og:description",
+  //         content: this.item.OgDescription,
+  //         vmid: "og:description",
+  //       },
+  //     ],
+  //   };
+  // },
+  // created() {
+  //   this.getLandingData();
+  // },
+  // data() {
+  //   return {
+  //     item: {},
+  //   };
+  // },
+  // methods: {
+  //   getLandingData() {
+  //     axios
+  //       .get("https://api-fdt.whappy.it/api/Landing/" + this.paramsFromRoute.id)
+  //       .then((res) => {
+  //         console.log("LANDING PAGE DATA ", res.data);
+  //         this.item = res.data;
+  //         this.item.title = this.item.title["it-IT"];
+  //         this.item.body = this.item.body["it-IT"];
+  //       });
+  //   },
+  // },
 };
 </script>
 

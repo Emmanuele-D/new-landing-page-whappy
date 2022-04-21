@@ -107,6 +107,7 @@ export default {
   },
   mounted() {
     this.setStartingTime();
+    console.log(this.item);
   },
   destroyed() {
     window.removeEventListener("scroll", this.handleScroll);

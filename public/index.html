@@ -17,6 +17,35 @@
     gtag('config', 'UA-223083710-1');
   </script>
 
+  <!-- <script>
+
+    let url = window.location.href
+
+    let idPage = url.split("/")[4]
+
+
+
+
+    fetch("https://api-fdt.whappy.it/api/Landing/" + idPage).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+
+      console.log("DATA ", data)
+
+      document.head.innerHTML += ('<title> ' + data.title['it-IT'] + ' </title>');
+      document.head.innerHTML += ('<meta property="og:title" content="' + data.title['it-IT'] + '" />');
+      document.head.innerHTML += ('<meta property="og:type" content="website" />');
+      document.head.innerHTML += ('<meta property="og:url" content="' + document.location.href + '" />');
+      document.head.innerHTML += ('<meta property="og:image" content="' + data.url_cover + '" />');
+      document.head.innerHTML += ('<meta property="og:description" content="' + data.OgDescription + '" />');
+
+    }).catch(function () {
+      console.log("Booo");
+    });
+
+
+
+  </script> -->
 
 </head>
 
