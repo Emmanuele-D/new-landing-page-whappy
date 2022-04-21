@@ -47,14 +47,13 @@ export default {
           // localStorage.setItem("ipAddress", data.ip);
         })
         .then((res) => {
-          console.log(res);
+          res;
         });
     },
     getLandingData() {
       axios
         .get("https://api-fdt.whappy.it/api/Landing/" + this.paramsFromRoute.id)
         .then((res) => {
-          console.log("LANDING PAGE DATA ", res.data.body);
           this.item = res.data;
           this.item.title = this.item.title["it-IT"];
           this.item.body = this.item.body["it-IT"];
@@ -71,7 +70,7 @@ export default {
             this.ipFasullo
         )
         .then((res) => {
-          console.log(res);
+          res;
         });
     },
   },

@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div v-if="socialArray" class="section">
+    <div v-if="socialsArray" class="section">
       <SocialButton
         v-for="social in socialsArray"
         :key="social"
@@ -32,7 +32,7 @@
         <form>
           <div v-for="item in formContatto" :key="item.label" class="form-item">
             <div>
-              <label :for="label">{{ item.label }}</label>
+              <label :for="item.label">{{ item.label }}</label>
               <span v-if="item.required"> *</span>
             </div>
             <div>
@@ -46,7 +46,7 @@
               />
             </div>
           </div>
-          <button @click="sendForm">Invia</button>
+          <button @click="sendForm">{{ testoBottone }}</button>
         </form>
       </div>
     </div>
@@ -60,6 +60,26 @@ import SocialButton from "./SocialButton.vue";
 
 export default {
   name: "MainComponent",
+  // metaInfo() {
+  //   return {
+  //     title: this.item.title,
+  //     titleTemplate: null,
+  //     meta: [
+  //       {
+  //         property: "og:image",
+  //         content: this.item.url_cover,
+  //         vmid: "og:image",
+  //       },
+  //       { property: "og:title", content: this.item.title, vmid: "og:title" },
+  //       { property: "og:type", content: "website", vmid: "og:type" },
+  //       {
+  //         property: "og:description",
+  //         content: this.item.OgDescription,
+  //         vmid: "og:description",
+  //       },
+  //     ],
+  //   };
+  // },
   components: {
     SocialButton,
   },
@@ -93,6 +113,7 @@ export default {
   },
   data() {
     return {
+      testoBottone: "Invia",
       formContatto: [],
       pctScrolled: 0,
       startingTime: 0,
@@ -118,7 +139,7 @@ export default {
           // localStorage.setItem("ipAddress", data.ip);
         })
         .then((res) => {
-          console.log(res);
+          res;
         });
     },
 
@@ -129,8 +150,6 @@ export default {
       this.elapsedTime = 0;
       let endTime = new Date().getTime();
       this.elapsedTime = (endTime - this.startingTime) / 1000;
-
-      console.log("ELAPSED TIME", this.elapsedTime);
 
       if (this.ipFasullo) {
         axios
@@ -145,7 +164,7 @@ export default {
               this.ipFasullo
           )
           .then((res) => {
-            console.log(res);
+            res;
             var visibilityChange;
             if (typeof document.hidden !== "undefined") {
               // Opera 12.10 and Firefox 18 and later support
@@ -198,7 +217,7 @@ export default {
                 this.ipFasullo
             )
             .then((res) => {
-              console.log(res);
+              res;
             });
         }
         window.removeEventListener("scroll", this.handleScroll);
@@ -217,7 +236,7 @@ export default {
                 this.ipFasullo
             )
             .then((res) => {
-              console.log(res);
+              res;
             });
           this.listenFormClicked = false;
         }
@@ -251,7 +270,12 @@ export default {
               this.formContatto
             )
             .then((res) => {
-              console.log(res);
+              if (res) {
+                this.testoBottone = "Form inviato correttamente";
+                this.formContatto.forEach((element) => {
+                  element.value = "";
+                });
+              }
             });
         }
       }
@@ -265,9 +289,11 @@ export default {
     },
     socialsArray() {
       let array = [];
-      this.item.social.forEach((element) => {
-        element.nome ? array.push(element) : null;
-      });
+      if (this.item.social) {
+        this.item.social.forEach((element) => {
+          element.nome ? array.push(element) : null;
+        });
+      }
       return array;
     },
   },
@@ -394,5 +420,37 @@ button:active {
 
 .padding-bottom {
   padding-bottom: 3rem;
+}
+
+.show-modal {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.1);
+  transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+  z-index: 10;
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 1rem 1.5rem;
+  width: 80vw;
+  border-radius: 0.5rem;
 }
 </style>

@@ -7,6 +7,14 @@
 <script>
 export default {
   name: "App",
+  metaInfo: {
+    title: "app vue",
+    titleTemplate: "%s | Arkadiainfo",
+    htmlAttrs: {
+      lang: "en-US",
+    },
+    meta: [{ charset: "utf-8" }],
+  },
 };
 </script>
 
